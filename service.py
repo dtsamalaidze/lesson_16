@@ -64,13 +64,10 @@ def get_by_id(model, _id):
     except Exception:
         return {}
 
-def update_universal(model, _id, data):
+def update_universal(model, _id, values):
     try:
-        data = db.session.query(model).get(_id)
-
-        data = db.session.query(model).get(_id)
-        data.id = data.get('_id')
-        return
+        db.session.query(model).filter(model.id == _id).update(values)
+        db.session.commit()
     except Exception:
         return {}
 

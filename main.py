@@ -2,7 +2,7 @@ import json
 from flask import request
 from Config import app
 from models import User, Order, Offer
-from service import init_db, get_all, get_by_id, insert_data_user
+from service import init_db, get_all, get_by_id, insert_data_user, update_universal
 
 
 @app.route("/users/", methods=['GET', 'POST'])
@@ -39,7 +39,12 @@ def get_by_id_users(user_id):
             mimetype="application/json"
         )
     elif request.method == 'PUT':
-        pass
+        update_universal(User, user_id, request.json)
+        return app.response_class(
+            response=json.dumps(['OK'], indent=4, ensure_ascii=False),
+            status=200,
+            mimetype="application/json"
+        )
 
 
 @app.get("/orders/")
@@ -51,15 +56,22 @@ def get_orders():
     )
 
 
-@app.get("/orders/<int:order_id>")
+@app.route("/orders/<int:order_id>", methods=['GET', 'PUT'])
 def get_by_id_orders(order_id):
-    data = get_by_id(Order, order_id)
-
-    return app.response_class(
-        response=json.dumps(data, indent=4, ensure_ascii=False),
-        status=200,
-        mimetype="application/json"
-    )
+    if request.method == 'GET':
+        data = get_by_id(Order, order_id)
+        return app.response_class(
+            response=json.dumps(data, indent=4, ensure_ascii=False),
+            status=200,
+            mimetype="application/json"
+        )
+    elif request.method == 'PUT':
+        update_universal(Order, order_id, request.json)
+        return app.response_class(
+            response=json.dumps(['OK'], indent=4, ensure_ascii=False),
+            status=200,
+            mimetype="application/json"
+        )
 
 
 @app.get("/offers/")
