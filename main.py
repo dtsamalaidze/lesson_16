@@ -72,7 +72,6 @@ def get_orders():
         )
 
 
-
 @app.route("/orders/<int:order_id>", methods=['GET', 'PUT'])
 def get_by_id_orders(order_id):
     if request.method == 'GET':
@@ -131,7 +130,6 @@ def get_by_id_offers(offer_id):
             status=200,
             mimetype="application/json"
         )
-
 
 
 if __name__ == '__main__':
