@@ -83,15 +83,23 @@ def get_offers():
     )
 
 
-@app.get("/offers/<int:offer_id>")
+@app.route("/offers/<int:offer_id>", methods=['GET', 'PUT'])
 def get_by_id_offers(offer_id):
-    data = get_by_id(Offer, offer_id)
+    if request.method == 'GET':
+        data = get_by_id(Offer, offer_id)
+        return app.response_class(
+            response=json.dumps(data, indent=4, ensure_ascii=False),
+            status=200,
+            mimetype="application/json"
+        )
+    elif request.method == 'PUT':
+        update_universal(Offer, offer_id, request.json)
+        return app.response_class(
+            response=json.dumps(['OK'], indent=4, ensure_ascii=False),
+            status=200,
+            mimetype="application/json"
+        )
 
-    return app.response_class(
-        response=json.dumps(data, indent=4, ensure_ascii=False),
-        status=200,
-        mimetype="application/json"
-    )
 
 
 if __name__ == '__main__':
